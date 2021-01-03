@@ -130,7 +130,7 @@ for i=3:m-2
                 end
             end
         end
-        img(i,j) = Med(13);
+        img(i,j) = Med(12);
 
     end     
 end
