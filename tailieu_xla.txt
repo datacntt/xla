@@ -1,0 +1,180 @@
+// doc anh
+
+function pushbutton1_Callback(hObject, eventdata, handles)
+global img;
+[FileName,PathName] = uigetfile({'*.*'});
+fullname = strcat(PathName,FileName);
+img = imread(fullname);
+axes(handles.axes1);
+imshow(img);
+
+
+// cau 1
+// a
+function pushbutton2_Callback(hObject, eventdata, handles)
+global img;
+global cmy;
+img = im2double(img);
+r = img(:,:,1);
+g = img(:,:,2);
+b = img(:,:,3);
+
+c = 1 - r;
+m = 1 - g;
+y = 1 - b;
+cmy = cat(3,c,m,y);
+axes(handles.axes2);
+imshow(cmy);
+
+// b
+function pushbutton3_Callback(hObject, eventdata, handles)
+global cmy;
+c = cmy(:,:,1);
+m = cmy(:,:,2);
+y = cmy(:,:,3);
+
+r = 1 - c;
+g = 1 - m;
+b = 1 - y;
+rgb = cat(3,r,g,b);
+axes(handles.axes3);
+imshow(rgb);
+
+
+// cau 2
+
+in=imread('..\Anh_Du_Lieu\lena.png');
+A=zeros(3);
+gx=[-1 0 1;-2 0 2;-1 0 1];
+gy=[1 2 1;0 0 0;-1 -2 -1];
+out_matrix=zeros(size(in,1)-2,size(in,2)-2);
+for i=1:size(in,1)
+    for j=1:size(in,2)
+        x=i+2;y=j+2;
+        if(x>size(in,1)||y>size(in,2))
+            continue;
+        else
+            A(1:3,1:3)=in(i:x,j:y);
+            sx=gx*A;
+            sy=gy*A;
+            ssx=sum(sx(:));
+            ssy=sum(sy(:));
+            M=sqrt(ssx^2+ssy^2);
+            out_matrix(i,j)=M;
+        end
+    end
+end
+out=uint8(out_matrix);
+imshow(out);
+
+
+// cau 3
+
+function pushbutton11_Callback(hObject, eventdata, handles)
+global img;
+img = im2double(img);
+[m n] = size(img);
+Med = [];
+for i=3:m-2
+    for j=3:n-2
+       
+        
+        q=1;
+        for g=-2:2
+            for l=-2:2
+                Med(q) = img(i+l,j+g);
+                q = q + 1;
+            end
+        end
+        
+        
+        sum =0;
+        for k=1:25
+            sum = sum + Med(k);
+        end
+        img(i,j) = sum/25;
+    end
+end
+axes(handles.axes2);
+imshow(img);
+
+// trung vi 5x5
+
+function pushbutton10_Callback(hObject, eventdata, handles)
+global img;
+img = im2double(img);
+[m n] = size(img);
+Med = [];
+for i=3:m-2
+    for j=3:n-2
+       
+        
+        q=1;
+        for g=-2:2
+            for l=-2:2
+                Med(q) = img(i+l,j+g);
+                q = q + 1;
+            end
+            %q = 1;
+        end
+        
+        
+        %img(i,j) = median(Med);
+        temp = 0;
+        for k=1:24
+            for h=k+1:25
+                if(Med(k)<Med(h))
+                    temp = Med(k);
+                    Med(k) = Med(h);
+                    Med(h) = temp;
+                end
+            end
+        end
+        img(i,j) = Med(13);
+
+    end     
+end
+axes(handles.axes2);
+imshow(img);
+
+
+// chuyen cac he mau
+
+// ycbcr
+
+function pushbutton6_Callback(hObject, eventdata, handles)
+global img;
+global ycbcr;
+img = im2double(img);
+r = img(:,:,1);
+g = img(:,:,2);
+b = img(:,:,3);
+
+y = (65.481*r + 128.553*g + 24.966*b)/256;
+cb = 0.5 + (-37.797*r - 74.203*g + 112*b)/256;
+cr = 0.5 + (112*r - 93.786*g - 18.214*b)/256;
+
+
+ycbcr = cat(3,y,cb,cr);
+axes(handles.axes2);
+imshow(ycbcr);
+
+// ntsc
+
+function pushbutton4_Callback(hObject, eventdata, handles)
+global img;
+global yiq;
+img = im2double(img);
+r = img(:,:,1);
+g = img(:,:,2);
+b = img(:,:,3);
+
+y = 0.299*r + 0.587*g + 0.114*b;
+i = 0.596*r - 0.274*g - 0.322*b;
+q = 0.211*r - 0.523*g + 0.312*b;
+
+yiq = cat(3,y,i,q);
+axes(handles.axes2);
+imshow(yiq);
+
+
