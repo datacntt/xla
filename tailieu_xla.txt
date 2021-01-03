@@ -329,3 +329,19 @@ txt2 = get(hObject,'string');
 
 set(handles.sl2,'value',str2num(txt2));
 guidata(hObject,handles);
+
+
+
+// RGB -> HSV
+
+
+V = max(R,G,B);
+& = V - min(R,G,B);
+S = &/V;
+
+
+neu R = V -> H = (G - B) / (& * 6)
+
+neu G = V -> H = ( 2 + (B-R)/&)/6 
+
+neu B = V -> H = ( 4 + (R-G))/6
