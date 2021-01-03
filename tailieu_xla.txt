@@ -178,3 +178,154 @@ axes(handles.axes2);
 imshow(yiq);
 
 
+// menu cong tru anh
+
+
+chon = get (handles.popupmenu2,'Value');
+switch chon
+    case 1
+    case 2
+        img_sum = imadd(img1,img2);
+        axes(handles.axes3);
+        imshow(img_sum);
+    case 3
+        img_sub = imsubtract(img1,img2);
+        axes(handles.axes3);
+        imshow(img_sub);
+    case 4
+        img_sub = imsubtract(img2,img1);
+        axes(handles.axes3);
+        imshow(img_sub);
+
+	case 3  % ảnh màu -> ảnh xám
+        gray=rgb2gray(HinhAnh);
+        axes(handles.axes2);
+        imshow(gray); 
+   
+ 	case 4 	% chuyển ảnh âm bản
+        amban=imcomplement(HinhAnh);
+         axes(handles.axes2);
+        imshow(amban);
+        img=255-HinhAnh;
+        axes(handles.axes2);
+        imshow(img);
+
+case 7 	% Lọc rank
+        gray=rgb2gray(HinhAnh);
+        rank=ordfilt2(gray,1,ones(3,3));
+         axes(handles.axes2);
+         imshow(rank);
+
+ 
+
+
+case 8 	% Lọc thông cao
+        [m,n] = size(HinhAnh);
+        b=double(HinhAnh);
+        w = [1/9 1/9 1/9;1/9 1/9 1/9;1/9 1/9 1/9];
+        for i=2:1:m-1
+            for j=2:1:n-1
+                 r(i,j)=b(i-1,j-1)*w(1)+b(i-1,j)*w(2)+b(i-1,j+1)*w(3)+b(i,j-1)*w(4)+b(i,j)*w(5)+b(i,j+1)*w(6)+b(i+1,j-1)*w(7)+b(i+1,j)*w(8)+b(i+1,j+1)*w(9);
+            end
+        end
+         axes(handles.axes2);
+         imshow(uint8(r));
+
+
+
+case 9 	% Lọc thông thấp
+        [m,n] = size(HinhAnh);
+        b=double(HinhAnh);
+        w = [-1/9 -1/9 -1/9;-1/9 -1/9 8/9;-1/9 -1/9 -1/9];
+        for i=2:1:m-1
+            for j=2:1:n-1
+                 r(i,j)=b(i-1,j-1)*w(1)+b(i-1,j)*w(2)+b(i-1,j+1)*w(3)+b(i,j-1)*w(4)+b(i,j)*w(5)+b(i,j+1)*w(6)+b(i+1,j-1)*w(7)+b(i+1,j)*w(8)+b(i+1,j+1)*w(9);
+            end
+        end
+         axes(handles.axes2);
+         imshow(uint8(r));
+
+
+
+case 10 	% Lọc min
+         gray=rgb2gray(HinhAnh);
+        rank=ordfilt2(gray,1,ones(3,3));
+         axes(handles.axes2);
+         imshow(rank);
+
+
+
+case 11 	% Lọc max
+         gray=rgb2gray(HinhAnh);
+        rank=ordfilt2(gray,9,ones(3,3));
+         axes(handles.axes2);
+         imshow(rank);
+
+
+case 12 	% Ngưỡng ảnh
+        gray = rgb2gray(HinhAnh);
+        im2bw1= im2bw(gray,0.5);
+         figure, imshow(im2bw1);
+         I=rgb2gray(HinhAnh);
+        % nguong tu cho 
+         sz=size(I);
+            bin=zeros(sz);
+            for i=1:sz(1)
+                for j=1:sz(2)
+                    if(I(i,j)>100) 		% 150 co the doi theo de nhe
+                        bin(i,j)=1;
+                    end
+                end
+            end
+         axes(handles.axes2);
+         imshow(bin);
+
+
+case 13 	% Xói mòn ảnh
+        k=ones(3,3);
+        xoimon=imerode(HinhAnh,k);
+        axes(handles.axes2);
+        imshow(xoimon);
+	%Giãn nở
+      	gianno=imdilate(HinhAnh,k);
+     	figure, imshow(gianno);
+ 
+
+
+case 14 	% Phát hiện biên
+        % canh lapliccian
+         gray=rgb2gray(HinhAnh);
+         k=fspecial('laplacian');
+         canh=imfilter(double(gray),k,'symmetric');
+         figure, imshow(canh);
+
+           k1=fspecial('log',[10 10] ,3.0);  
+           zero_cro=edge(gray,'zerocross',[],k1);
+            figure, imshow(zero_cro);
+            
+            sobel_=edge(gray,'sobel');
+            figure, imshow(sobel_);
+            
+              prewitt=edge(gray,'prewitt');
+            figure, imshow(prewitt);
+            
+             canny=edge(gray,'canny');
+            figure, imshow(canny);
+
+
+// edit text
+
+gt = str2num(get(handles.edit1,'string'));
+
+
+
+
+// gia tri thanh keo
+
+function txt2_Callback(hObject, eventdata, handles)
+
+global txt2;
+txt2 = get(hObject,'string');
+
+set(handles.sl2,'value',str2num(txt2));
+guidata(hObject,handles);
