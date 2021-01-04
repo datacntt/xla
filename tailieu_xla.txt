@@ -252,6 +252,14 @@ case 10 	% Lọc min
         rank=ordfilt2(gray,1,ones(3,3));
          axes(handles.axes2);
          imshow(rank);
+	
+
+	% Lọc min
+         gray=im2bw(HinhAnh);
+        rank=ordfilt2(gray,1,ones(3,3));
+         axes(handles.axes2);
+         imshow(rank);
+	
 
 
 
